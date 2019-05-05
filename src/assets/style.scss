@@ -1,0 +1,133 @@
+.col-xs-6 {
+  width: 50% !important;
+}
+
+.col-xs-12 {
+  width: 100% !important;
+}
+
+.pos-left {
+  float: left;
+}
+
+.pos-right {
+  float: right;
+}
+
+.xs {
+  padding-right: 1vw;
+}
+
+.hide {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100%;
+  background: black;
+  opacity: 0.9;
+}
+
+.main {
+  height: 100%;
+  background: url(./images/default.jpg) no-repeat center center fixed;
+  background-size: cover;
+  width: 100%;
+  overflow: hidden;
+  z-index: -1;
+  position: absolute;
+}
+
+.index-content {
+  margin: 0;
+  border: 0;
+  outline: 0;
+  text-align: center;
+  color: white !important;
+  height: 100%;
+  top: 34%;
+  width: 100%;
+  z-index: -1;
+  position: absolute;
+
+  .index-address {
+    font-family: calluna;
+    font-size: 1.2vw;
+    font-style: italic;
+    letter-spacing: 0.03em;
+    line-height: 1.3em;
+  }
+
+  .index-mode {
+    padding-top: 4vw;
+    padding-bottom: 3vw;
+    letter-spacing: 0.05em;
+    line-height: 1.3em;
+
+    .index-mode-content {
+      display: inline;
+      padding: 0 2vw;
+      font-family: ambroise-std;
+      font-size: 5.625vw;
+      font-style: normal;
+      font-weight: 300;
+      cursor: pointer;
+    }
+  }
+}
+
+.index-header {
+  margin: 0;
+  border: 0;
+  outline: 0;
+  color: white;
+  font-family: calluna;
+  padding: 3vw 3vw 3vw 3vw;
+  width: 95%;
+  z-index: -1;
+  position: absolute;
+
+  .index-title {
+    margin: 0;
+    border: 0;
+    outline: 0;
+    text-align: left;
+    font-family: ambroise-std;
+    font-style: normal;
+    letter-spacing: 0.3em;
+    font-size: 21px;
+  }
+
+  .index-nav {
+    margin: 0;
+    border: 0;
+    outline: 0;
+    text-align: right;
+    letter-spacing: 0.01em;
+    font-size: 15px;
+
+    :hover {
+      color: rgb(197, 74, 74) !important;
+    }
+
+    .index-nav-content {
+      margin: 0;
+      border: 0;
+      outline: 0;
+      padding-inline-end: 10px;
+      display: inline;
+      cursor: pointer;
+    }
+  }
+}
