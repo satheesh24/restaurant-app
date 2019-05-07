@@ -1,71 +1,85 @@
 import React, { Component } from "react";
-import "../../../assets/orderNow.scss";
-import "../../../assets/style.scss";
 
 class Orders extends Component {
   constructor() {
     super();
     this.state = {
-      totalText: "TOTAL",
-      currency: "$",
-      location: "Olympia Tech Park",
-      address: "Guindy",
-      method: "PickUp",
-      time: "Now",
-      itemDisplay: [
-        {
-          name: "Chicken Briyani",
-          count: 2,
-          unitPrice: 100
-        },
-        {
-          name: "Mutton Briyani",
-          count: 1,
-          unitPrice: 125
-        }
-      ],
-      totalValue: 325
+      totalText: "Total: ",
+      currency: "$ ",
+      totalValue: 475,
+      cancelBtn: "Cancel the order",
+      viewBtn: "Cancelled"
     };
   }
 
   render() {
     return (
       <div className="view-order">
-        <div className="view-header">
-          <div className="view-location">
-            {" "}
-            <div className="col-xs-6 pos-left">
-              <span className="title"> {this.state.location} </span>
-              <span className="address">{this.state.address} </span>{" "}
+        {this.props.orders.map(orders => (
+          <div>
+            <div className="view-header">
+              <div className="view-location">
+                <span className="title"> {orders.location} </span>
+                <span className="address">
+                  Arrival - {orders.delivery_time}{" "}
+                </span>{" "}
+              </div>
             </div>
-            <div className="col-xs-6 pos-right">
-              <span className="method">{this.state.method}</span>
-              <span className="time">{this.state.time}</span>
+
+            <div className="view-body">
+              {orders.item_details.itemDetails.map((i, key) => (
+                <div className="view-item">
+                  <span className="name col-xs-6 pos-left"> {i.name} </span>
+                  <span className="price col-xs-6 pos-right">
+                    {" "}
+                    {i.count} qty.{" "}
+                  </span>
+                </div>
+              ))}
             </div>
+            <div className="view-footer">
+              <div className="view-total">
+                {" "}
+                <span className="content col-xs-6 pos-left">
+                  {this.state.totalText}
+                </span>{" "}
+                <span className="price col-xs-6 pos-right">
+                  {this.state.currency}
+                  {orders.total_price}
+                </span>{" "}
+              </div>
+              <div className="view-status">
+                <span className="content col-xs-6 pos-left">
+                  Order #{orders.id}
+                </span>{" "}
+                <span className="price col-xs-6 pos-right">
+                  {orders.status}
+                </span>{" "}
+              </div>
+            </div>
+            {orders.status === "created" ? (
+              <div className="view-btn">
+                <div className="btn">
+                  {" "}
+                  <div
+                    className="ahref"
+                    onClick={id => this.props.cancelOrder(orders.id)}
+                  >
+                    {" "}
+                    {this.state.cancelBtn}
+                  </div>{" "}
+                </div>
+              </div>
+            ) : (
+              <div className="view-btn">
+                <div className="cancelled-btn">
+                  {" "}
+                  <div className="ahref"> {this.state.viewBtn}</div>{" "}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-        <div className="view-body">
-          {this.state.itemDisplay.map((i, key) => (
-            <div className="view-item">
-              <span className="name"> {i.name} </span>
-              <span className="price"> {i.count} </span>
-              <span className="price">
-                {this.state.currency}
-                {i.price}{" "}
-              </span>
-            </div>
-          ))}
-        </div>
-        <div className="view-footer">
-          <div className="view-total">
-            {" "}
-            <span className="content">{this.state.totalText}</span>{" "}
-            <span className="price">
-              {this.state.currency}
-              {this.state.totalValue}
-            </span>{" "}
-          </div>
-        </div>
+        ))}
       </div>
     );
   }

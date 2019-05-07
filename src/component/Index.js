@@ -5,6 +5,7 @@ import Header from "./home/Header";
 import Body from "./home/Body";
 import Authentication from "./authentication/Authentication";
 import OrderIndex from "./order/OrderIndex";
+import ViewOrders from "./order/ViewOrders.js";
 
 class Index extends Component {
   constructor(props) {
@@ -16,7 +17,9 @@ class Index extends Component {
       userName: "Hello, ",
       signedIn: false,
       userId: 0,
-      orderCompleted: false
+      orderCompleted: false,
+      viewOrders: false,
+      orders: []
     };
   }
 
@@ -26,14 +29,27 @@ class Index extends Component {
 
   componentDidMount() {
     UserStore.addInitialChangeListener(this.onStoreChange);
+    UserStore.addViewOrderChangeListener(this.viewOrderChange);
+    UserStore.addCancelOrderChangeListener(this.cancelOrderChange);
   }
 
   componentWillUnmount() {
     UserStore.removeInitialChangeListener(this.onStoreChange);
+    UserStore.removeViewOrderChangeListener(this.viewOrderChange);
+    UserStore.addCancelOrderChangeListener(this.cancelOrderChange);
   }
 
   initialLoad = () => {
     UserAction.initialLoad();
+  };
+
+  viewOrders = () => {
+    let userId = this.state.userId;
+    UserAction.viewOrders(userId);
+  };
+
+  cancelOrder = id => {
+    UserAction.cancelOrder({ id: id, data: { status: "cancelled" } });
   };
 
   onStoreChange = () => {
@@ -46,6 +62,20 @@ class Index extends Component {
     }
   };
 
+  viewOrderChange = () => {
+    let status = UserStore.getStatus();
+    if (status === "SUCCESS") {
+      let orders = UserStore.getOrders();
+      this.setState({
+        orders: orders
+      });
+    }
+  };
+
+  cancelOrderChange = () => {
+    this.setState({});
+  };
+
   onClick = component => {
     if (component === "OrderNow") {
       this.setState({
@@ -54,6 +84,13 @@ class Index extends Component {
         userId: localStorage.id,
         orderCompleted: false
       });
+    }
+
+    if (component === "View Orders") {
+      this.setState({
+        viewOrders: true
+      });
+      this.viewOrders();
     }
   };
 
@@ -101,11 +138,25 @@ class Index extends Component {
     });
   };
 
+  closeViewOrders = () => {
+    this.setState({
+      viewOrders: false
+    });
+  };
+
   render() {
+    const { viewOrders } = this.state;
     return (
       <div class="main">
-        <Header onClick={this.onClick} />
+        <Header onClick={this.onClick} signedIn={this.state.signedIn} />
         <Body />
+        {viewOrders ? (
+          <ViewOrders
+            closeViewOrders={this.closeViewOrders}
+            orders={this.state.orders}
+            cancelOrder={id => this.cancelOrder(id)}
+          />
+        ) : null}
 
         {this.state.componentSelected ? (
           !this.state.signedIn ? (

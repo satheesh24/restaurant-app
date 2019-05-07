@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import "../../../assets/orderNow.scss";
-import "../../../assets/style.scss";
 
 class Checkout extends Component {
   constructor() {

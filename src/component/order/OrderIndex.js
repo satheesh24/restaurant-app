@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import "../../assets/style.scss";
-import "../../assets/orderNow.scss";
 import Preferrence from "../order/preferrence/Preferrence";
 import Cart from "../order/cart/Cart";
 import Signout from "../authentication/Signout";
@@ -64,19 +62,19 @@ class OrderIndex extends Component {
         {
           id: 1,
           name: "Chicken Briyani",
-          price: 100.0,
+          price: 3.0,
           count: 0
         },
         {
           id: 2,
           name: "Mutton Briyani",
-          price: 125.0,
+          price: 4.0,
           count: 0
         },
         {
           id: 3,
           name: "Egg Briyani",
-          price: 75.0,
+          price: 2.0,
           count: 0
         }
       ],
@@ -231,7 +229,6 @@ class OrderIndex extends Component {
   onStoreChange = () => {
     let status = UserStore.getStatus();
     if (status === "SUCCESS") {
-      console.log("Success");
       this.props.exitOrder();
     } else if (status === "FAILURE") {
       let errMsg = UserStore.getError();

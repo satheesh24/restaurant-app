@@ -17,14 +17,31 @@ const UserApi = {
     return apiConfig.post(logOutUrl, {});
   },
   initialLoad(data, id) {
-    let initialLoadUrl = "api/Users/1?access_token=";
+    let initialLoadUrl = "api/Users/" + id + "?access_token=";
     initialLoadUrl += data;
     return apiConfig.get(initialLoadUrl, id);
   },
   checkOut(data, accessToken) {
-    let logOutUrl = "api/orders?access_token=";
-    logOutUrl += accessToken;
-    return apiConfig.post(logOutUrl, data);
+    let checkOutUrl = "api/orders?access_token=";
+    checkOutUrl += accessToken;
+    return apiConfig.post(checkOutUrl, data);
+  },
+  viewOrders(accessToken, id) {
+    let viewOrdersUrl =
+      "http://0.0.0.0:3000/api/users/" +
+      id +
+      "/orders?access_token=" +
+      accessToken;
+    return apiConfig.get(viewOrdersUrl, id);
+  },
+  cancelOrder(data, id, accessToken) {
+    let cancelOrderUrl =
+      "http://0.0.0.0:3000/api/orders/update?where=%7B%20%22id%22%3A%20" +
+      id +
+      "%20%7D&access_token=" +
+      accessToken;
+
+    return apiConfig.post(cancelOrderUrl, data);
   }
 };
 

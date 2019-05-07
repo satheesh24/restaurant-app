@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import "../../../assets/orderNow.scss";
-import "../../../assets/style.scss";
 import Menu from "./Menu";
 import Checkout from "./Checkout";
 import Quantity from "./Quantity";

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "../../assets/style.scss";
 
 class Body extends Component {
   constructor(props) {

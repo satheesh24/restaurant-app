@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import "../../assets/style.scss";
-import "../../assets/orderNow.scss";
 import Signin from "../authentication/Signin";
 import Signup from "../authentication/Signup";
 import Reset from "../authentication/Reset";

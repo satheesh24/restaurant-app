@@ -32,6 +32,19 @@ const UserAction = {
       actionType: "CHECKOUT",
       data: user
     });
+  },
+
+  viewOrders() {
+    AppDispatcher.handleAction({
+      actionType: "VIEWORDERS"
+    });
+  },
+
+  cancelOrder(user) {
+    AppDispatcher.handleAction({
+      actionType: "CANCELORDER",
+      data: user
+    });
   }
 };
 

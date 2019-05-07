@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import "../../../assets/style.scss";
-import "../../../assets/orderNow.scss";
 
 class Location extends Component {
   constructor(props) {

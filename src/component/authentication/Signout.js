@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import "../../assets/style.scss";
-import "../../assets/orderNow.scss";
 import UserAction from "../../actions/UserAction";
 import UserStore from "../../stores/UserStore";
 import Orders from "../order/cart/Orders";
@@ -13,9 +11,7 @@ class Signout extends Component {
       footerText: "Eats",
       footerTitle: "POWERED BY: ",
       cancel: "Cancel",
-      signoutButton: "Log Out",
-      viewOrderBtn: "View Placed Orders",
-      viewOrder: false
+      signoutButton: "Log Out"
     };
   }
 
@@ -23,10 +19,6 @@ class Signout extends Component {
     UserAction.signout();
     window.localStorage.clear();
     this.props.signedOut();
-  };
-
-  viewOrders = () => {
-    this.setState({ viewOrder: true });
   };
 
   render() {
@@ -37,27 +29,6 @@ class Signout extends Component {
           <hr />
           <div className="sign-in">
             <div className="action">
-              <div
-                className={
-                  this.state.viewOrder ? "hide" : "signin-button reset-button"
-                }
-              >
-                {" "}
-                <div className="ahref" onClick={this.viewOrders}>
-                  {" "}
-                  {this.state.viewOrderBtn}{" "}
-                </div>{" "}
-              </div>
-              {this.state.viewOrder ? <Orders /> : null}
-              <div className="other-action col-xs-12">
-                <div
-                  className="reset-action pos-left"
-                  onClick={this.props.signOutCancelClick}
-                >
-                  {" "}
-                  {this.state.cancel}{" "}
-                </div>
-              </div>
               <div className="signin-button reset-button">
                 {" "}
                 <div className="ahref" onClick={this.signout}>

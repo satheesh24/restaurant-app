@@ -7,7 +7,9 @@ let id = 0,
   accessToken = "",
   userName = "",
   status = "",
-  error = "";
+  error = "",
+  orders = "",
+  cancelId = "";
 
 const UserStore = _.extend({}, EventEmitter.prototype, {
   emitInitialChange() {
@@ -58,6 +60,34 @@ const UserStore = _.extend({}, EventEmitter.prototype, {
     this.removeListener("change", callback);
   },
 
+  emitViewOrderChange() {
+    this.emit("viewOrderChange");
+  },
+
+  addViewOrderChangeListener(callback) {
+    this.on("viewOrderChange", callback);
+  },
+
+  removeViewOrderChangeListener(callback) {
+    this.removeListener("viewOrderChange", callback);
+  },
+
+  emitCancelOrderChange() {
+    this.emit("cancelOrderChange");
+  },
+
+  addCancelOrderChangeListener(callback) {
+    this.on("cancelOrderChange", callback);
+  },
+
+  removeCancelOrderChangeListener(callback) {
+    this.removeListener("cancelOrderChange", callback);
+  },
+
+  updateOrder() {
+    orders.map(i => (i.id === cancelId ? (i.status = "cancelled") : null));
+  },
+
   getUserName() {
     return userName;
   },
@@ -68,6 +98,10 @@ const UserStore = _.extend({}, EventEmitter.prototype, {
 
   getError() {
     return error;
+  },
+
+  getOrders() {
+    return orders;
   }
 });
 
@@ -150,7 +184,6 @@ AppDispatcher.register(function(payload) {
       break;
 
     case "CHECKOUT":
-      console.log(action.data);
       accessToken = localStorage.access_token;
       if (accessToken !== "")
         UserApi.checkOut(action.data, accessToken).then(
@@ -163,6 +196,44 @@ AppDispatcher.register(function(payload) {
             status = "FAILURE";
             error = "Order not placed";
             UserStore.emitCheckoutChange();
+          }
+        );
+      break;
+
+    case "VIEWORDERS":
+      accessToken = localStorage.access_token;
+      id = localStorage.id;
+      if (accessToken !== "")
+        UserApi.viewOrders(accessToken, id).then(
+          response => {
+            error = "";
+            status = "SUCCESS";
+            orders = response.data;
+            UserStore.emitViewOrderChange();
+          },
+          err => {
+            status = "FAILURE";
+            error = "Orders not retrieved";
+            UserStore.emitViewOrderChange();
+          }
+        );
+      break;
+
+    case "CANCELORDER":
+      accessToken = localStorage.access_token;
+      cancelId = action.data.id;
+      if (accessToken !== "")
+        UserApi.cancelOrder(action.data.data, action.data.id, accessToken).then(
+          response => {
+            error = "";
+            status = "SUCCESS";
+            UserStore.updateOrder();
+            UserStore.emitCancelOrderChange();
+          },
+          err => {
+            status = "FAILURE";
+            error = "Orders not retrieved";
+            UserStore.emitCancelOrderChange();
           }
         );
       break;

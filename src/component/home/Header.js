@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "../../assets/style.scss";
 
 class Header extends Component {
   constructor(props) {
@@ -12,7 +11,8 @@ class Header extends Component {
         { id: 3, name: "Gallery", value: "Gallery" },
         { id: 4, name: "Story", value: "Story" },
         { id: 5, name: "Visit", value: "Visit" }
-      ]
+      ],
+      viewOrder: "View Orders"
     };
   }
 
@@ -28,7 +28,13 @@ class Header extends Component {
             >
               {navTab.name}
             </span>
-          ))}
+          ))}{" "}
+          <span
+            className="index-nav-content"
+            onClick={() => this.props.onClick(this.state.viewOrder)}
+          >
+            {this.props.signedIn ? this.state.viewOrder : null}{" "}
+          </span>
         </div>
       </div>
     );
