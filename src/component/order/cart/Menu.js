@@ -6,7 +6,7 @@ class Menu extends Component {
     this.state = {
       backward: "< Locations",
       title: " Briyani",
-      currency: "$"
+      currency: "\u20B9 "
     };
   }
 

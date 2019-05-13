@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Location from "./Location";
 import Method from "./Method";
 import Time from "./Time";
+import TimePeriod from "./TimePeriod";
 
 class Preferrence extends Component {
   render() {
@@ -31,8 +32,20 @@ class Preferrence extends Component {
             timeTitleClick={this.props.timeTitleClick}
             timeOptionClick={this.props.timeOptionClick}
             time={this.props.time}
+            timePeriodOptionClick={this.props.timePeriodOptionClick}
+            timePeriod={this.props.timePeriod}
+            timePeriodSelected={this.props.timePeriodSelected}
           />{" "}
         </p>
+        {this.props.timeSelected === 2 &&
+        this.props.timePeriodSelected === 0 ? (
+          <p className="content-list">
+            <TimePeriod
+              timePeriodOptionClick={this.props.timePeriodOptionClick}
+              timePeriod={this.props.timePeriod}
+            />{" "}
+          </p>
+        ) : null}
       </fragment>
     );
   }

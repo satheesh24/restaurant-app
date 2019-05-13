@@ -5,10 +5,10 @@ class Orders extends Component {
     super();
     this.state = {
       totalText: "Total: ",
-      currency: "$ ",
-      totalValue: 475,
+      currency: "\u20B9 ",
       cancelBtn: "Cancel the order",
-      viewBtn: "Cancelled"
+      viewBtn: "Cancelled",
+      mulTxt: " x "
     };
   }
 
@@ -21,7 +21,7 @@ class Orders extends Component {
               <div className="view-location">
                 <span className="title"> {orders.location} </span>
                 <span className="address">
-                  Arrival - {orders.delivery_time}{" "}
+                  Method - {orders.delivery_type}{" "}
                 </span>{" "}
               </div>
             </div>
@@ -32,7 +32,13 @@ class Orders extends Component {
                   <span className="name col-xs-6 pos-left"> {i.name} </span>
                   <span className="price col-xs-6 pos-right">
                     {" "}
-                    {i.count} qty.{" "}
+                    <span className="calc">
+                      {i.count}
+                      {this.state.mulTxt}
+                      {i.price}
+                    </span>
+                    {this.state.currency}
+                    {i.count * i.price}
                   </span>
                 </div>
               ))}

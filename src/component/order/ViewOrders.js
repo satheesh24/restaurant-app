@@ -6,11 +6,7 @@ class ViewOrders extends Component {
     let viewOrder = [];
     let orders = this.props.orders;
 
-    for (
-      let i = orders.length - 1;
-      i > orders.length - 6 && orders[i] !== undefined;
-      i--
-    ) {
+    for (let i = orders.length - 1; i >= 0 && orders[i] !== undefined; i--) {
       let order = [];
       order.push(orders[i]);
       viewOrder.push(
@@ -22,12 +18,7 @@ class ViewOrders extends Component {
   render() {
     return (
       <fragment>
-        <div className="wrapper-main" onClick={this.props.closeViewOrders} />
-
-        <div className="wrapper">
-          {this.createViewOrder()}
-          <div />
-        </div>
+        <div className="wrapper">{this.createViewOrder()}</div>{" "}
       </fragment>
     );
   }

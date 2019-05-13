@@ -13,7 +13,7 @@ class OrderIndex extends Component {
 
   getInitialState() {
     return {
-      title: "Eats",
+      title: "Home",
       viewBtn: "view the menu",
       location: [
         {
@@ -53,8 +53,7 @@ class OrderIndex extends Component {
         {
           id: 2,
           name: "Order for Later",
-          content:
-            "Have your order prepared at a specified future date & time.",
+          content: "Have your order prepared at a specified time.",
           display: "Later"
         }
       ],
@@ -78,6 +77,33 @@ class OrderIndex extends Component {
           count: 0
         }
       ],
+
+      timePeriod: [
+        {
+          id: 1,
+          time: "a"
+        },
+        {
+          id: 2,
+          time: "b"
+        },
+        {
+          id: 3,
+          time: "c"
+        },
+        {
+          id: 4,
+          time: "d"
+        },
+        {
+          id: 5,
+          time: "e"
+        },
+        {
+          id: 6,
+          time: "f"
+        }
+      ],
       itemSelected: [
         {
           id: 0,
@@ -94,9 +120,19 @@ class OrderIndex extends Component {
       locationSelected: 0,
       methodSelected: 0,
       timeSelected: 0,
+      timePeriodSelected: 0,
       itemDisplay: [],
-      totalValue: 0
+      totalValue: 0,
+      loadChange: {
+        locationSelected: 0,
+        methodSelected: 0,
+        timeSelected: 0
+      }
     };
+  }
+
+  componentWillMount() {
+    this.initialLoad();
   }
 
   componentDidMount() {
@@ -107,36 +143,137 @@ class OrderIndex extends Component {
     UserStore.removeCheckoutChangeListener(this.onStoreChange);
   }
 
+  initialLoad = () => {
+    if (localStorage.loadChange !== undefined) {
+      let loadChange = JSON.parse(localStorage.loadChange);
+      let locationSelected = loadChange.locationSelected;
+      let methodSelected = loadChange.methodSelected;
+      let timeSelected = loadChange.timeSelected;
+      this.setState({
+        loadChange,
+        locationSelected,
+        methodSelected,
+        timeSelected
+      });
+    }
+
+    if (localStorage.itemDisplay !== undefined) {
+      let itemDisplay = JSON.parse(localStorage.itemDisplay);
+      let totalValue = 0;
+      for (let i = 0; i < itemDisplay.length; i++) {
+        totalValue += itemDisplay[i].price;
+      }
+      this.setState({
+        itemDisplay,
+        totalValue
+      });
+    }
+
+    if (localStorage.itemCart !== undefined) {
+      let itemCart = JSON.parse(localStorage.itemCart);
+      this.setState({
+        itemCart
+      });
+    }
+  };
+
   locationOptionClick = locationSelected => {
-    this.setState({ locationSelected });
+    let loadChange = this.state.loadChange;
+    loadChange.locationSelected = locationSelected;
+    localStorage.setItem("loadChange", JSON.stringify(loadChange));
+    this.setState({
+      locationSelected,
+      loadChange
+    });
   };
 
   locationTitleClick = () => {
+    let loadChange = this.state.loadChange;
+    loadChange.locationSelected = 0;
+    loadChange.methodSelected = 0;
+    loadChange.timeSelected = 0;
+    localStorage.setItem("loadChange", JSON.stringify(loadChange));
     this.setState({
       locationSelected: 0,
       methodSelected: 0,
-      timeSelected: 0
+      timeSelected: 0,
+      timePeriodSelected: 0,
+      loadChange
     });
   };
 
   methodOptionClick = (methodSelected, method) => {
-    this.setState({ methodSelected });
+    let loadChange = this.state.loadChange;
+    loadChange.methodSelected = methodSelected;
+    localStorage.setItem("loadChange", JSON.stringify(loadChange));
+    this.setState({
+      methodSelected,
+      loadChange
+    });
   };
 
   methodTitleClick = () => {
+    let loadChange = this.state.loadChange;
+    loadChange.methodSelected = 0;
+    loadChange.timeSelected = 0;
+    localStorage.setItem("loadChange", JSON.stringify(loadChange));
     this.setState({
       methodSelected: 0,
-      timeSelected: 0
+      timeSelected: 0,
+      timePeriodSelected: 0,
+      loadChange
+    });
+  };
+
+  getCurrTime = () => {
+    let date = new Date();
+    let minutes = date.getMinutes();
+    let hours = date.getHours();
+    let timePeriod = this.state.timePeriod;
+    for (let i = 0; i < 6; i++) {
+      minutes = minutes + 30;
+      hours = minutes >= 60 ? (hours + 1 > 23 ? 0 : hours + 1) : hours;
+      minutes = minutes % 60;
+      let strTime =
+        (hours >= 12 ? hours % 12 : hours) +
+        ":" +
+        (minutes < 10 ? "0" + minutes : minutes) +
+        " " +
+        (hours >= 12 ? "pm" : "am");
+      timePeriod[i].time = strTime;
+    }
+    this.setState({
+      timePeriod
     });
   };
 
   timeOptionClick = (timeSelected, time) => {
-    this.setState({ timeSelected });
+    let loadChange = this.state.loadChange;
+    loadChange.timeSelected = timeSelected === 2 ? 0 : timeSelected;
+    localStorage.setItem("loadChange", JSON.stringify(loadChange));
+    if (timeSelected === 2) {
+      this.getCurrTime();
+    }
+    this.setState({
+      timeSelected,
+      loadChange
+    });
   };
 
   timeTitleClick = () => {
+    let loadChange = this.state.loadChange;
+    loadChange.timeSelected = 0;
+    localStorage.setItem("loadChange", JSON.stringify(loadChange));
     this.setState({
-      timeSelected: 0
+      timeSelected: 0,
+      timePeriodSelected: 0,
+      loadChange
+    });
+  };
+
+  timePeriodOptionClick = timePeriodSelected => {
+    this.setState({
+      timePeriodSelected
     });
   };
 
@@ -168,14 +305,18 @@ class OrderIndex extends Component {
   };
 
   itemCartFun = itemCart => {
+    let item = itemCart;
+    localStorage.setItem("itemCart", JSON.stringify(item));
     this.setState({
-      itemCart
+      itemCart: item
     });
   };
 
   itemDisplayFun = itemDisplay => {
+    let item = itemDisplay;
+    localStorage.setItem("itemDisplay", JSON.stringify(item));
     this.setState({
-      itemDisplay
+      itemDisplay: item
     });
   };
 
@@ -232,7 +373,6 @@ class OrderIndex extends Component {
       this.props.exitOrder();
     } else if (status === "FAILURE") {
       let errMsg = UserStore.getError();
-      console.log(errMsg);
     }
   };
 
@@ -241,10 +381,16 @@ class OrderIndex extends Component {
       <div className={this.props.componentSelected ? "" : "hide"}>
         <div className={this.getSignOut ? "hide" : "order-now"}>
           <div className="header">
-            <span className="title col-xs-6 pos-left">{this.state.title}</span>
-            <span className="user col-xs-6 pos-right" onClick={this.getSignout}>
-              {this.props.user}
-            </span>
+            <div className="col-xs-6 pos-left">
+              <span className="title" onClick={this.props.exit}>
+                {this.state.title}
+              </span>
+            </div>
+            <div className="col-xs-6 pos-right">
+              <span className="user" onClick={this.getSignout}>
+                {this.props.user}
+              </span>
+            </div>
           </div>
           <div className="content">
             <Preferrence
@@ -260,6 +406,9 @@ class OrderIndex extends Component {
               timeTitleClick={this.timeTitleClick}
               timeOptionClick={this.timeOptionClick}
               time={this.state.time}
+              timePeriodOptionClick={this.timePeriodOptionClick}
+              timePeriod={this.state.timePeriod}
+              timePeriodSelected={this.state.timePeriodSelected}
             />
           </div>
           <div className="content-button">
@@ -277,9 +426,11 @@ class OrderIndex extends Component {
             locationSelected={this.state.locationSelected}
             methodSelected={this.state.methodSelected}
             timeSelected={this.state.timeSelected}
+            timePeriodSelected={this.state.timePeriodSelected}
             location={this.state.location}
             method={this.state.method}
             time={this.state.time}
+            timePeriod={this.state.timePeriod}
             getBackOrderNow={this.getPreferrenceOption}
             itemCart={this.state.itemCart}
             itemCartFun={itemCart => this.itemCartFun(itemCart)}
@@ -308,7 +459,11 @@ class OrderIndex extends Component {
       this.state.locationSelected !== 0 &&
       this.state.methodSelected !== 0 &&
       this.state.timeSelected !== 0
-        ? "order-btn visible"
+        ? this.state.timeSelected === 2
+          ? this.state.timePeriodSelected !== 0
+            ? "order-btn visible"
+            : "hide"
+          : "order-btn visible"
         : "hide";
     return classes;
   }

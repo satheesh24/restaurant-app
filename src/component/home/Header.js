@@ -5,36 +5,49 @@ class Header extends Component {
     super(props);
     this.state = {
       title: "TREMONT",
-      navTab: [
-        { id: 1, name: "Order Now", value: "OrderNow" },
-        { id: 2, name: "Home", value: "Home" },
-        { id: 3, name: "Gallery", value: "Gallery" },
-        { id: 4, name: "Story", value: "Story" },
-        { id: 5, name: "Visit", value: "Visit" }
+      navTab: [{ id: 1, name: "Order Now", value: "OrderNow" }],
+      otherTab: [
+        { id: 2, name: "Gallery", value: "Gallery" },
+        { id: 3, name: "Story", value: "Story" },
+        { id: 4, name: "Visit", value: "Visit" }
       ],
-      viewOrder: "View Orders"
+      viewOrder: "Order History"
     };
   }
 
   render() {
     return (
       <div className="index-header">
-        <div className="index-title col-xs-6 pos-left">{this.state.title}</div>
-        <div className="index-nav col-xs-6 pos-right">
-          {this.state.navTab.map(navTab => (
+        <div className="pos-left">
+          <span className="index-title">{this.state.title}</span>
+          {this.state.otherTab.map(otherTab => (
             <span
-              className="index-nav-content"
-              onClick={() => this.props.onClick(navTab.value)}
+              className="other-nav-content"
+              onClick={() => this.props.onClick(otherTab.name)}
             >
-              {navTab.name}
+              {otherTab.name}
             </span>
           ))}{" "}
-          <span
-            className="index-nav-content"
-            onClick={() => this.props.onClick(this.state.viewOrder)}
-          >
-            {this.props.signedIn ? this.state.viewOrder : null}{" "}
-          </span>
+        </div>
+        <div className="index-nav pos-right">
+          {this.state.navTab.map(navTab => (
+            <div className="index-nav-content">
+              <span
+                className="index-cursor"
+                onClick={() => this.props.onClick(navTab.name)}
+              >
+                {navTab.name}
+              </span>
+            </div>
+          ))}{" "}
+          <div className="index-nav-content">
+            <span
+              className="index-cursor"
+              onClick={() => this.props.onClick(this.state.viewOrder)}
+            >
+              {this.props.signedIn ? this.state.viewOrder : null}{" "}
+            </span>
+          </div>
         </div>
       </div>
     );

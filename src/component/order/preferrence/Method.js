@@ -4,7 +4,8 @@ class Method extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "Choose a Method"
+      title: "Choose a Method",
+      method: "Method - "
     };
   }
   render() {
@@ -15,7 +16,12 @@ class Method extends Component {
           onClick={() => this.props.methodTitleClick()}
         >
           <span className="location-icon" />
-          <span className="header-content">{this.getToggleTitle()}</span>
+          <span className="header-content">
+            <span className="header-side">
+              {this.props.methodSelected === 0 ? "" : this.state.method}{" "}
+            </span>
+            {this.getToggleTitle()}
+          </span>
         </div>
         <div className={this.getToggleContent()}>
           {this.props.method.map((method, key) => (

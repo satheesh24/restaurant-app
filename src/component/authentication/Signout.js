@@ -8,8 +8,6 @@ class Signout extends Component {
     super(props);
     this.state = {
       header: "Squarespace",
-      footerText: "Eats",
-      footerTitle: "POWERED BY: ",
       cancel: "Cancel",
       signoutButton: "Log Out"
     };
@@ -46,11 +44,6 @@ class Signout extends Component {
                 </div>
               </div>
             </div>
-          </div>
-          <div classsName="foot">
-            {" "}
-            <span className="footer-1"> {this.state.footerTitle} </span>
-            <span className="footer-2"> {this.state.footerText} </span>
           </div>
         </div>
       </div>

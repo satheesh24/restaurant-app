@@ -102,6 +102,7 @@ class Cart extends Component {
             item={this.props.itemSelected}
             getBackItemNow={this.getBackItemNow}
             addCart={count => this.addCart(count)}
+            itemDisplay={this.props.itemDisplay}
           />
         ) : null}
         {this.props.getCartMenu ? (
@@ -109,9 +110,11 @@ class Cart extends Component {
             locationSelected={this.props.locationSelected}
             methodSelected={this.props.methodSelected}
             timeSelected={this.props.timeSelected}
+            timePeriodSelected={this.props.timePeriodSelected}
             location={this.props.location}
             method={this.props.method}
             time={this.props.time}
+            timePeriod={this.props.timePeriod}
             itemCart={this.props.itemCart}
             itemSelected={this.props.itemSelected}
             totalValue={this.props.totalValue}

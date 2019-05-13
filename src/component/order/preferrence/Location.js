@@ -4,7 +4,8 @@ class Location extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "Choose Location"
+      title: "Choose Location",
+      location: "Location - "
     };
   }
 
@@ -16,7 +17,12 @@ class Location extends Component {
           onClick={() => this.props.locationTitleClick()}
         >
           <span className="location-icon" />
-          <span className="header-content">{this.getToggleTitle()}</span>
+          <span className="header-content">
+            <span className="header-side">
+              {this.props.locationSelected === 0 ? "" : this.state.location}{" "}
+            </span>
+            {this.getToggleTitle()}
+          </span>
         </div>
         <div className={this.getToggleContent()}>
           {this.props.location.map((location, key) => (

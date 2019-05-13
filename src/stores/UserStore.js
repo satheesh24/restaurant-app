@@ -188,6 +188,11 @@ AppDispatcher.register(function(payload) {
       if (accessToken !== "")
         UserApi.checkOut(action.data, accessToken).then(
           response => {
+            window.localStorage.clear();
+            if (accessToken) {
+              localStorage.setItem("access_token", accessToken);
+              localStorage.setItem("id", id);
+            }
             error = "";
             status = "SUCCESS";
             UserStore.emitCheckoutChange();

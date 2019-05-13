@@ -9,8 +9,6 @@ class Authentication extends Component {
     super(props);
     this.state = {
       header: "Squarespace",
-      footerText: "Eats",
-      footerTitle: "POWERED BY: ",
       getSignin: true,
       getSignup: false,
       getReset: false,
@@ -58,11 +56,6 @@ class Authentication extends Component {
           ) : null}
           {getSignup ? <Signup getSignin={this.getSignin} /> : null}
           {this.state.getReset ? <Reset getSignin={this.getSignin} /> : null}
-          <div classsName="foot">
-            {" "}
-            <span className="footer-1"> {this.state.footerTitle} </span>
-            <span className="footer-2"> {this.state.footerText} </span>
-          </div>
         </div>
       </div>
     );

@@ -9,13 +9,19 @@ class Quantity extends Component {
       incBtn: "+",
       decBtn: "-",
       cartBtn: "Add to Cart",
-      currency: "$",
-      count: 1
+      updtBtn: "Update the Cart",
+      currency: "\u20B9 ",
+      count: 1,
+      countExist: 0
     };
   }
 
+  componentWillMount = () => {
+    this.getCount();
+  };
+
   decrement = () => {
-    let count = this.state.count;
+    let count = parseInt(this.state.count);
     count -= 1;
     this.setState({
       count
@@ -23,7 +29,7 @@ class Quantity extends Component {
   };
 
   increment = () => {
-    let count = this.state.count;
+    let count = parseInt(this.state.count);
     count += 1;
     this.setState({
       count
@@ -38,14 +44,32 @@ class Quantity extends Component {
     this.props.getBackItemNow();
   };
 
+  getCount = () => {
+    let itemDisplay = this.props.itemDisplay;
+    let item = itemDisplay.filter(
+      i => i.id === parseInt(this.props.item.map(item => item.id))
+    );
+    let countExist = parseInt(item.map(item => item.count)) > 0 ? 1 : 0;
+    let count =
+      parseInt(item.map(item => item.count)) > 0
+        ? item.map(item => item.count)
+        : parseInt("1");
+    this.setState({
+      count: count,
+      countExist: countExist
+    });
+  };
+
   render() {
     return (
-      <div className="menu">
+      <div className="quantity-menu">
         <div className="menu-body">
           <div className="quantity-header">
-            <div className="backward" onClick={this.getBackItemNow}>
+            <div>
               {" "}
-              {this.state.backward}{" "}
+              <span className="backward" onClick={this.getBackItemNow}>
+                {this.state.backward}{" "}
+              </span>
             </div>
           </div>
           <div className="quantity-body">
@@ -80,7 +104,7 @@ class Quantity extends Component {
           </div>
           <div className="quantity-footer">
             <div className="cart-btn" onClick={this.addCart}>
-              {this.state.cartBtn}
+              {this.state.countExist ? this.state.updtBtn : this.state.cartBtn}
             </div>
           </div>
         </div>
@@ -90,13 +114,13 @@ class Quantity extends Component {
 
   toggleIBtn() {
     let classes = "count-Ibtn ";
-    classes += this.state.count === 0 ? "btn-disable" : "";
+    classes += this.state.count <= 0 ? "btn-disable" : "";
     return classes;
   }
 
   toggleDBtn() {
     let classes = "count-Ibtn ";
-    classes += this.state.count === 10 ? "btn-disable" : "";
+    classes += this.state.count >= 10 ? "btn-disable" : "";
     return classes;
   }
 }

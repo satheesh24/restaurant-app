@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import UserAction from "../actions/UserAction";
 import UserStore from "../stores/UserStore";
 import Header from "./home/Header";
+import HeaderMob from "./home/HeaderMob";
 import Body from "./home/Body";
 import Authentication from "./authentication/Authentication";
 import OrderIndex from "./order/OrderIndex";
@@ -19,7 +20,10 @@ class Index extends Component {
       userId: 0,
       orderCompleted: false,
       viewOrders: false,
-      orders: []
+      orders: [],
+      messageStatus: false,
+      message: "Order Placed Successfully !",
+      viewMenu: false
     };
   }
 
@@ -76,21 +80,41 @@ class Index extends Component {
     this.setState({});
   };
 
+  toggleMenu = () => {
+    let viewMenu = !this.state.viewMenu;
+    this.setState({
+      viewMenu
+    });
+  };
+
   onClick = component => {
-    if (component === "OrderNow") {
+    if (component === "Order Now") {
       this.setState({
         component: component,
         componentSelected: true,
         userId: localStorage.id,
-        orderCompleted: false
+        orderCompleted: false,
+        viewOrders: false,
+        messageStatus: false,
+        viewMenu: false
       });
-    }
-
-    if (component === "View Orders") {
+    } else if (component === "Order History") {
       this.setState({
-        viewOrders: true
+        viewOrders: true,
+        component: component,
+        componentSelected: false,
+        viewMenu: false
       });
       this.viewOrders();
+    } else {
+      this.setState({
+        viewOrders: false,
+        component: "",
+        componentSelected: false,
+        orderCompleted: false,
+        messageStatus: false,
+        viewMenu: false
+      });
     }
   };
 
@@ -126,7 +150,8 @@ class Index extends Component {
     this.setState({
       component: "",
       componentSelected: false,
-      orderCompleted: false
+      orderCompleted: false,
+      viewMenu: false
     });
   };
 
@@ -134,13 +159,9 @@ class Index extends Component {
     this.setState({
       component: "",
       componentSelected: false,
-      orderCompleted: true
-    });
-  };
-
-  closeViewOrders = () => {
-    this.setState({
-      viewOrders: false
+      orderCompleted: true,
+      messageStatus: true,
+      viewMenu: false
     });
   };
 
@@ -149,10 +170,15 @@ class Index extends Component {
     return (
       <div class="main">
         <Header onClick={this.onClick} signedIn={this.state.signedIn} />
+        <HeaderMob
+          onClick={this.onClick}
+          signedIn={this.state.signedIn}
+          viewMenu={this.state.viewMenu}
+          toggleMenu={this.toggleMenu}
+        />
         <Body />
         {viewOrders ? (
           <ViewOrders
-            closeViewOrders={this.closeViewOrders}
             orders={this.state.orders}
             cancelOrder={id => this.cancelOrder(id)}
           />
@@ -174,11 +200,20 @@ class Index extends Component {
             signedOut={this.signedOut}
             componentSelected={this.state.componentSelected}
             exitOrder={this.exitOrder}
+            exit={this.exit}
           />
         ) : null}
 
         {this.state.componentSelected ? (
-          <div onClick={this.exit} className="order-now-extra" />
+          <div onClick={this.exit} className="order-now-extra">
+            {" "}
+            <div className="close"> X </div>
+          </div>
+        ) : null}
+        {this.state.messageStatus ? (
+          <div id="message" className="message">
+            {this.state.message}{" "}
+          </div>
         ) : null}
       </div>
     );

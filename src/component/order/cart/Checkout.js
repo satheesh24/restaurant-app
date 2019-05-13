@@ -7,7 +7,9 @@ class Checkout extends Component {
       totalText: "TOTAL",
       bfrBtn: "Place order",
       aftBtn: "Checkout",
-      currency: "$"
+      currency: "\u20B9 ",
+      mulTxt: " x ",
+      atTxt: " at "
     };
   }
 
@@ -40,6 +42,12 @@ class Checkout extends Component {
               {this.props.time
                 .filter(i => i.id === this.props.timeSelected)
                 .map(tim => tim.display)}{" "}
+              {this.props.timeSelected === 2
+                ? this.state.atTxt +
+                  this.props.timePeriod
+                    .filter(i => i.id === this.props.timePeriodSelected)
+                    .map(tim => tim.time)
+                : null}
             </span>
           </div>
         </div>
@@ -48,6 +56,11 @@ class Checkout extends Component {
             <div className="check-item">
               <span className="name"> {i.name} </span>
               <span className="price">
+                <span className="calc">
+                  {i.count}
+                  {this.state.mulTxt}
+                  {i.price / i.count}
+                </span>
                 {this.state.currency}
                 {i.price}{" "}
               </span>
